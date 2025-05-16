@@ -1,0 +1,107 @@
+Table User {
+	id integer [ pk, increment, not null, unique ]
+	email text
+	hash varchar
+	createdAt timestamp
+	updatedAt timestamp
+}
+
+Table Attendance {
+	id integer [ pk, increment, not null, unique ]
+	userId integer
+	typeId integer
+	dateTime timestamp
+	photo text
+}
+
+Table Employee {
+	id integer [ pk, increment, not null, unique ]
+	userId integer
+	name text
+	gender varchar
+	dob date
+	departmentId integer
+	positionId integer
+	createdAt timestamp
+	updatedAt timestamp
+}
+
+Table Department {
+	id integer [ pk, increment, not null, unique ]
+	name text
+}
+
+Table Position {
+	id integer [ pk, increment, not null, unique ]
+	name varchar
+}
+
+Table AttendanceType {
+	id integer [ pk, increment, not null, unique ]
+	name text
+}
+
+Table EmployeeHistory {
+	id integer [ pk, increment, not null, unique ]
+	name varchar
+	gender varchar
+	dob date
+	department integer
+	positionId integer
+	createdAt timestamp
+}
+
+Table TargetAttendance {
+	id integer [ pk, increment, not null, unique ]
+	userId integer
+	weekday integer
+	startTime time
+	endTime time
+	createdAt timestamp
+	updatedAt timestamp
+}
+
+Table TargetAttendanceHistory {
+	id integer [ pk, increment, not null, unique ]
+	userId integer
+	day integer
+	startTime time
+	endTime time
+	createdAt timestamp
+}
+
+Ref fk_Employee_departmentId_Department {
+	Employee.departmentId > Department.id [ delete: no action, update: no action ]
+}
+
+Ref fk_Employee_positionId_Position {
+	Employee.positionId > Position.id [ delete: no action, update: no action ]
+}
+
+Ref fk_Attendance_userId_User {
+	Attendance.userId > User.id [ delete: no action, update: no action ]
+}
+
+Ref fk_AttendanceType_id_Attendance {
+	AttendanceType.id - Attendance.typeId [ delete: no action, update: no action ]
+}
+
+Ref fk_Employee_userId_User {
+	Employee.userId - User.id [ delete: no action, update: no action ]
+}
+
+Ref fk_EmployeeHistory_id_Employee {
+	EmployeeHistory.id - Employee.id [ delete: no action, update: no action ]
+}
+
+Ref fk_EmployeeHistory_department_Department {
+	EmployeeHistory.department > Department.id [ delete: no action, update: no action ]
+}
+
+Ref fk_TargetAttendance_userId_User {
+	TargetAttendance.userId > User.id [ delete: no action, update: no action ]
+}
+
+Ref fk_TargetAttendanceHistory_userId_User {
+	TargetAttendanceHistory.userId > User.id [ delete: no action, update: no action ]
+}
