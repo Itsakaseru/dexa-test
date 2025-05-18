@@ -70,6 +70,13 @@ Table TargetAttendanceHistory {
 	createdAt timestamp
 }
 
+Table Token {
+	id integer [ pk, increment, not null, unique ]
+	userId integer
+	jti varchar
+	isRevoked boolean
+}
+
 Ref fk_Employee_departmentId_Department {
 	Employee.departmentId > Department.id [ delete: no action, update: no action ]
 }
@@ -104,4 +111,8 @@ Ref fk_TargetAttendance_userId_User {
 
 Ref fk_TargetAttendanceHistory_userId_User {
 	TargetAttendanceHistory.userId > User.id [ delete: no action, update: no action ]
+}
+
+Ref fk_Token_userId_User {
+	Token.userId > User.id [ delete: no action, update: no action ]
 }

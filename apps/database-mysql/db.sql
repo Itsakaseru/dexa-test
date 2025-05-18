@@ -13,6 +13,18 @@ CREATE TABLE User
     PRIMARY KEY (id)
 );
 
+CREATE TABLE Token
+(
+    id          INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
+    userId      INTEGER NOT NULL,
+    jti         VARCHAR(36) NOT NULL UNIQUE,
+    isRevoked   BOOLEAN NOT NULL,
+    expiredAt   TIMESTAMP NOT NULL,
+    createdAt   TIMESTAMP NOT NULL,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId) REFERENCES User (id)
+);
 
 CREATE DATABASE EmployeeDB;
 USE EmployeeDB;
