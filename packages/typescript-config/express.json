@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "sourceMap": true,
+    "baseUrl": "${configDir}",
+    "outDir": "${configDir}/build",
+    "module": "commonjs",
+    "target": "ES2022",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  }
+}
