@@ -1,6 +1,7 @@
 import { LoginData } from "./auth";
 
-export interface EmployeeRegisterData extends LoginData {
+export interface EmployeeRegisterData {
+  userId: number,
   name: string,
   gender: "M" | "F",
   dob: Date,
