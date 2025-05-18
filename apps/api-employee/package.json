@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
-    "dev": "nodemon index.ts | pino-pretty",
+    "dev": "nodemon src/index.ts | pino-pretty",
     "build": "tsc --project .",
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,8 +29,8 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
     "@repo/shared-types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.18",

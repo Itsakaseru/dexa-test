@@ -2,8 +2,4 @@
   "extends": "@repo/typescript-config/express.json",
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "build"
-  }
 }
