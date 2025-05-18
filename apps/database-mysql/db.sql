@@ -74,7 +74,8 @@ CREATE TABLE EmployeeHistory
     createdAt       TIMESTAMP NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (departmentId) REFERENCES Department (id)
+    FOREIGN KEY (departmentId) REFERENCES Department (id),
+    FOREIGN KEY (positionId) REFERENCES Position (id)
 );
 
 CREATE DATABASE AttendanceDB;
