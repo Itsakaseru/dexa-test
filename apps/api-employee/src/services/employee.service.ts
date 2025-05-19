@@ -66,8 +66,8 @@ export async function deleteEmployee(userId: number) {
   // Failed to find data
   if (!currEmployeeData) return null;
 
-  const { updatedAt, ...currEmployeeDataWithoutUpdatedAt } = currEmployeeData || {};
-  const historyData = await createEmployeeHistory(currEmployeeDataWithoutUpdatedAt);
+  const { updatedAt, id, ...currEmployeeDataWithoutIdUpdatedAt } = currEmployeeData || {};
+  const historyData = await createEmployeeHistory(currEmployeeDataWithoutIdUpdatedAt);
 
   await prisma.employee.delete({
     where: {
