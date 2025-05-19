@@ -5,6 +5,9 @@ export default [
   layout("layout/default.tsx", [
     ...prefix("dashboard", [
       index("dashboard/index.tsx")
-    ])
+    ]),
+    ...prefix("employee", [
+      index("employee/index.tsx")
+    ]),
   ])
 ] satisfies RouteConfig;
