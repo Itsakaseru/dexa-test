@@ -94,7 +94,7 @@ CREATE TABLE Attendance
     id          INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     userId      INTEGER NOT NULL,
     typeId      INTEGER NOT NULL,
-    dateTime    TIME,
+    dateTime    TIME NOT NULL,
     photo       TEXT,
 
     PRIMARY KEY (id),
