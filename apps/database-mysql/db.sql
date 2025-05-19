@@ -7,8 +7,8 @@ CREATE TABLE User
     id          INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     email       VARCHAR(255) NOT NULL UNIQUE,
     hash        VARCHAR(72) NOT NULL,
-    createdAt   TIMESTAMP NOT NULL,
-    updatedAt   TIMESTAMP NOT NULL,
+    createdAt   DATETIME NOT NULL,
+    updatedAt   DATETIME NOT NULL,
 
     PRIMARY KEY (id)
 );
@@ -19,8 +19,8 @@ CREATE TABLE Token
     userId      INTEGER NOT NULL,
     jti         VARCHAR(36) NOT NULL UNIQUE,
     isRevoked   BOOLEAN NOT NULL,
-    expiredAt   TIMESTAMP NOT NULL,
-    createdAt   TIMESTAMP NOT NULL,
+    expiredAt   DATETIME NOT NULL,
+    createdAt   DATETIME NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (userId) REFERENCES User (id)
@@ -54,8 +54,8 @@ CREATE TABLE Employee
     dob             DATETIME NOT NULL,
     departmentId    INTEGER NOT NULL,
     positionId      INTEGER NOT NULL,
-    createdAt       TIMESTAMP NOT NULL,
-    updatedAt       TIMESTAMP NOT NULL,
+    createdAt       DATETIME NOT NULL,
+    updatedAt       DATETIME NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (departmentId) REFERENCES Department (id),
@@ -71,7 +71,7 @@ CREATE TABLE EmployeeHistory
     dob             DATETIME NOT NULL,
     departmentId    INTEGER NOT NULL,
     positionId      INTEGER NOT NULL,
-    createdAt       TIMESTAMP NOT NULL,
+    createdAt       DATETIME NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (departmentId) REFERENCES Department (id),
@@ -94,7 +94,7 @@ CREATE TABLE Attendance
     id          INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     userId      INTEGER NOT NULL,
     typeId      INTEGER NOT NULL,
-    dateTime    TIME NOT NULL,
+    dateTime    DATETIME NOT NULL,
     photo       TEXT,
 
     PRIMARY KEY (id),
@@ -108,8 +108,8 @@ CREATE TABLE TargetAttendance
     weekday     INTEGER NOT NULL,
     startTime   TIME NOT NULL,
     endTime     TIME NOT NULL,
-    createdAt   TIMESTAMP NOT NULL,
-    updatedAt   TIMESTAMP NOT NULL,
+    createdAt   DATETIME NOT NULL,
+    updatedAt   DATETIME NOT NULL,
 
     PRIMARY KEY (id)
 );
@@ -121,7 +121,7 @@ CREATE TABLE TargetAttendanceHistory
     weekday     INTEGER NOT NULL,
     startTime   TIME NOT NULL,
     endTime     TIME NOT NULL,
-    createdAt   TIMESTAMP NOT NULL,
+    createdAt   DATETIME NOT NULL,
 
     PRIMARY KEY (id)
 );

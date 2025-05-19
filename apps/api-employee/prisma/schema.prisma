@@ -23,8 +23,8 @@ model Employee {
   dob          DateTime   @db.DateTime(0)
   departmentId Int
   positionId   Int
-  createdAt    DateTime   @db.Timestamp(0)
-  updatedAt    DateTime   @db.Timestamp(0)
+  createdAt    DateTime   @db.DateTime(0)
+  updatedAt    DateTime   @db.DateTime(0)
   Department   Department @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Employee_ibfk_1")
   Position     Position   @relation(fields: [positionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Employee_ibfk_2")
 
@@ -40,7 +40,7 @@ model EmployeeHistory {
   dob          DateTime   @db.DateTime(0)
   departmentId Int
   positionId   Int
-  createdAt    DateTime   @db.Timestamp(0)
+  createdAt    DateTime   @db.DateTime(0)
   Department   Department @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "EmployeeHistory_ibfk_1")
   Position     Position   @relation(fields: [positionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "EmployeeHistory_ibfk_2")
 

@@ -12,8 +12,8 @@ model User {
   id        Int      @id @unique(map: "id") @default(autoincrement())
   email     String   @unique(map: "email") @db.VarChar(255)
   hash      String   @db.VarChar(72)
-  createdAt DateTime @db.Timestamp(0)
-  updatedAt DateTime @db.Timestamp(0)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
   Token     Token[]
 }
 
@@ -22,8 +22,8 @@ model Token {
   userId    Int
   jti       String   @unique(map: "jti") @db.VarChar(36)
   isRevoked Boolean
-  expiredAt DateTime @db.Timestamp(0)
-  createdAt DateTime @db.Timestamp(0)
+  expiredAt DateTime @db.DateTime(0)
+  createdAt DateTime @db.DateTime(0)
   User      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Token_ibfk_1")
 
   @@index([userId], map: "userId")

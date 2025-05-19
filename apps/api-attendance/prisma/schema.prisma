@@ -12,7 +12,7 @@ model Attendance {
   id             Int            @id @unique(map: "id") @default(autoincrement())
   userId         Int
   typeId         Int
-  dateTime       DateTime       @db.Time(0)
+  dateTime       DateTime       @db.DateTime(0)
   photo          String?        @db.Text
   AttendanceType AttendanceType @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Attendance_ibfk_1")
 
@@ -31,8 +31,8 @@ model TargetAttendance {
   weekday   Int
   startTime DateTime @db.Time(0)
   endTime   DateTime @db.Time(0)
-  createdAt DateTime @db.Timestamp(0)
-  updatedAt DateTime @db.Timestamp(0)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
 }
 
 model TargetAttendanceHistory {
@@ -41,5 +41,5 @@ model TargetAttendanceHistory {
   weekday   Int
   startTime DateTime @db.Time(0)
   endTime   DateTime @db.Time(0)
-  createdAt DateTime @db.Timestamp(0)
+  createdAt DateTime @db.DateTime(0)
 }
