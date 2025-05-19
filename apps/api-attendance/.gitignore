@@ -1,0 +1,5 @@
+# Prisma generated folder
+prisma/generated
+
+# Build folder
+build
