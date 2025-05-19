@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "exports": {
-    "./*": "./**/*.ts"
+    ".": "./index.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
