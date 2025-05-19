@@ -60,7 +60,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function refreshToken(req: Request, res: Response, next: NextFunction) {
-  const refreshToken: string | null = req.cookies.refreshToken;
+  const refreshToken: string | null = req.cookies.refreshToken.token;
 
   if (!refreshToken) {
     res.status(StatusCodes.BAD_REQUEST).send({ message: "Invalid refresh token" });
@@ -71,7 +71,7 @@ export async function refreshToken(req: Request, res: Response, next: NextFuncti
     // Can be decoupled to separate middleware to check the validity of either access token or refresh token
     const payload = await decodeToken(refreshToken);
 
-    if (await verifyToken(refreshToken)) {
+    if (!await verifyToken(refreshToken)) {
       res.status(StatusCodes.UNAUTHORIZED).send({ message: "Invalid refresh token" });
       return;
     }
