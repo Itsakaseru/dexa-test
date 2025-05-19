@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @unique(map: "id") @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   email     String   @unique(map: "email") @db.VarChar(255)
   hash      String   @db.VarChar(72)
   createdAt DateTime @db.DateTime(0)
@@ -18,7 +18,7 @@ model User {
 }
 
 model Token {
-  id        Int      @id @unique(map: "id") @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
   jti       String   @unique(map: "jti") @db.VarChar(36)
   isRevoked Boolean

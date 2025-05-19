@@ -108,12 +108,17 @@ async function insertEmployee() {
 }
 
 async function clear() {
+  await prisma.employee.deleteMany();
+  await prisma.employeeHistory.deleteMany();
   await prisma.department.deleteMany();
   await prisma.position.deleteMany();
-  await prisma.employee.deleteMany();
 }
 
-//clear();
-//insertDepartment();
-//insertPosition();
-//insertEmployee();
+async function main() {
+  await clear();
+  await insertDepartment();
+  await insertPosition();
+  await insertEmployee();
+}
+
+main();

@@ -42,7 +42,6 @@ async function insertTargetAttendance() {
         startTime: DEFAULT_ATTENDANCE_TARGET_TIME.startTime,
         endTime: DEFAULT_ATTENDANCE_TARGET_TIME.endTime,
         createdAt: new Date(),
-        updatedAt: new Date(),
       });
 
       idx++;
@@ -88,6 +87,18 @@ async function insertAttendance() {
   });
 }
 
-//insertAttendanceType();
-//insertTargetAttendance();
-//insertAttendance();
+async function clear() {
+  await prisma.attendance.deleteMany();
+  await prisma.targetAttendance.deleteMany();
+  await prisma.attendanceType.deleteMany();
+  await prisma.targetAttendanceHistory.deleteMany();
+}
+
+async function main() {
+  await clear();
+  await insertAttendanceType();
+  await insertTargetAttendance();
+  await insertAttendance();
+}
+
+main();

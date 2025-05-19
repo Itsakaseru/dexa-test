@@ -9,14 +9,14 @@ datasource db {
 }
 
 model Department {
-  id              Int               @id @unique(map: "id") @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String            @db.Text
   Employee        Employee[]
   EmployeeHistory EmployeeHistory[]
 }
 
 model Employee {
-  id           Int        @id @unique(map: "id") @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   userId       Int        @unique(map: "userId")
   name         String     @db.Text
   gender       String     @db.VarChar(1)
@@ -33,8 +33,8 @@ model Employee {
 }
 
 model EmployeeHistory {
-  id           Int        @id @unique(map: "id") @default(autoincrement())
-  userId       Int        @unique(map: "userId")
+  id           Int        @id @default(autoincrement())
+  userId       Int
   name         String     @db.Text
   gender       String     @db.VarChar(1)
   dob          DateTime   @db.DateTime(0)
@@ -49,7 +49,7 @@ model EmployeeHistory {
 }
 
 model Position {
-  id              Int               @id @unique(map: "id") @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String            @db.Text
   Employee        Employee[]
   EmployeeHistory EmployeeHistory[]

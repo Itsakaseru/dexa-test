@@ -57,5 +57,9 @@ async function clear() {
   await prisma.user.deleteMany();
 }
 
-clear();
-insertUsers();
+async function main() {
+  await clear();
+  await insertUsers();
+}
+
+main();
