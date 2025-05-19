@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes";
 import {createUser, deleteUser, getAllUsers, getUserById, updateUser} from "../services/user.service";
 import { Prisma } from "../../prisma/generated";
 import { LoginData } from "@repo/shared-types";
-import { getUserByEmailWithHash } from "../services/user.service";
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   const users = await getAllUsers();
@@ -35,6 +34,10 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 
   try {
     await createUser({ email, password });
+
+    res.status(StatusCodes.CREATED).json({
+      message: "User created successfully"
+    });
   }
   catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -55,6 +58,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function update(req: Request, res: Response, next: NextFunction) {
+  const { id } = req.params || {};
   const { email, password }: LoginData = req.body || {};
 
   if (!email || !password) {
@@ -65,16 +69,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   }
 
   try {
-    const user = await getUserByEmailWithHash(email);
-
-    if (!user) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: "User not found"
-      });
-      return;
-    }
-
-    await updateUser(user.id, {email, password});
+    await updateUser(Number(id), {email, password});
 
     res.status(StatusCodes.OK).json({
       message: "User updated successfully"
@@ -101,6 +96,29 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function remove(req: Request, res: Response, next: NextFunction) {
-  const { id } = req.body || {};
-  await deleteUser(id);
+  const { id } = req.params || {};
+
+  try {
+    await deleteUser(Number(id));
+
+    res.status(StatusCodes.OK).json({
+      message: "User deleted successfully"
+    });
+  }
+  catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2025") {
+        res.status(StatusCodes.NOT_FOUND).json({
+          message: "User not found"
+        });
+        return;
+      }
+    }
+    else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        message: "Internal server error"
+      });
+      return;
+    }
+  }
 }

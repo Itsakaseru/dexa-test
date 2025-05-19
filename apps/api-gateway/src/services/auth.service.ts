@@ -76,7 +76,8 @@ export async function verifyToken(token: string) {
       }
     });
 
-    if (status && status.isRevoked) return false;
+    if (!status) return false;
+    if (status.isRevoked) return false;
 
     jwt.verify(token, secret);
 
