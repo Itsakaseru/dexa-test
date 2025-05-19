@@ -30,5 +30,6 @@ app.use("/employee", employeeRoute);
 
 app.listen(PORT, async () => {
   await prisma.$connect();
+  console.log(`Running in ${ process.env.NODE_ENV || "development" } mode.`);
   console.log(`Server listening on port ${PORT}`);
 });

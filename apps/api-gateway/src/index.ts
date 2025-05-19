@@ -31,7 +31,10 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/auth", authRoute);
 app.use("/user", verifyAccessToken, userRoute);
 
+
+
 app.listen(PORT, async () => {
   await prisma.$connect();
+  console.log(`Running in ${ process.env.NODE_ENV || "development" } mode.`);
   console.log(`Server listening on port ${PORT}`);
 });

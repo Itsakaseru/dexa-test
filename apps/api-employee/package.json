@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "NODE_ENV=production node build/index.js",
     "dev": "nodemon src/index.ts | pino-pretty",
     "build": "tsc --project .",
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts",
