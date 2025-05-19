@@ -1,5 +1,5 @@
 {
   "extends": "@repo/typescript-config/express.json",
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "prisma/seed.ts"],
   "exclude": ["node_modules"],
 }

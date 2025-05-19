@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma/generated"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Attendance {
+  id             Int            @id @unique(map: "id") @default(autoincrement())
+  userId         Int
+  typeId         Int
+  dateTime       DateTime       @db.Time(0)
+  photo          String?        @db.Text
+  AttendanceType AttendanceType @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Attendance_ibfk_1")
+
+  @@index([typeId], map: "typeId")
+}
+
+model AttendanceType {
+  id         Int          @id @unique(map: "id") @default(autoincrement())
+  name       String       @db.Text
+  Attendance Attendance[]
+}
+
+model TargetAttendance {
+  id        Int      @id @unique(map: "id") @default(autoincrement())
+  userId    Int
+  weekday   Int
+  startTime DateTime @db.Time(0)
+  endTime   DateTime @db.Time(0)
+  createdAt DateTime @db.Timestamp(0)
+  updatedAt DateTime @db.Timestamp(0)
+}
+
+model TargetAttendanceHistory {
+  id        Int      @id @unique(map: "id") @default(autoincrement())
+  userId    Int
+  weekday   Int
+  startTime DateTime @db.Time(0)
+  endTime   DateTime @db.Time(0)
+  createdAt DateTime @db.Timestamp(0)
+}
