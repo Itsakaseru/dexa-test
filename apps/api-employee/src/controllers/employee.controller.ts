@@ -13,7 +13,7 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
   return;
 }
 
-export async function getById(req: Request, res: Response, next: NextFunction) {
+export async function getByUserId(req: Request, res: Response, next: NextFunction) {
   const { userId } = req.params || {};
 
   const employee = await getEmployeeByUserId(Number(userId));
@@ -112,8 +112,8 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   return;
 }
 
-export async function remove(req: Request, res: Response, next: NextFunction) {
-  const { id } = req.body || {};
+export async function removeById(req: Request, res: Response, next: NextFunction) {
+  const { id } = req.params || {};
 
   const historyData = await deleteEmployee(Number(id));
 

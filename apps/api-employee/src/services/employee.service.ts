@@ -15,6 +15,14 @@ export async function getEmployeeByUserId(userId: number) {
   });
 }
 
+export async function getEmployeeById(id: number) {
+  return prisma.employee.findUnique({
+    where: {
+      id
+    }
+  });
+}
+
 export async function createEmployee(data: EmployeeRegisterData) {
   return prisma.employee.create({
     data: {
@@ -25,10 +33,12 @@ export async function createEmployee(data: EmployeeRegisterData) {
   });
 }
 
-export async function createEmployeeHistory(data: Prisma.EmployeeHistoryCreateManyInput) {
+export async function createEmployeeHistory(data: Prisma.EmployeeCreateManyInput) {
+  const { id, updatedAt, ...dataClean } = data || {};
+
   return prisma.employeeHistory.create({
     data: {
-      ...data,
+      ...dataClean,
       createdAt: new Date(),
     }
   });
@@ -44,8 +54,7 @@ export async function updateEmployee(id: number, data: EmployeeRegisterData) {
   // Failed to find data
   if (!currEmployeeData) return null;
 
-  const { updatedAt, ...currEmployeeDataWithoutUpdatedAt } = currEmployeeData || {};
-  const historyData = await createEmployeeHistory(currEmployeeDataWithoutUpdatedAt);
+  const historyData = await createEmployeeHistory(currEmployeeData);
 
   await prisma.employee.update({
     where: {
@@ -60,18 +69,17 @@ export async function updateEmployee(id: number, data: EmployeeRegisterData) {
   return historyData;
 }
 
-export async function deleteEmployee(userId: number) {
-  const currEmployeeData = await getEmployeeByUserId(userId);
+export async function deleteEmployee(employeeId: number) {
+  const currEmployeeData = await getEmployeeById(employeeId);
 
   // Failed to find data
   if (!currEmployeeData) return null;
 
-  const { updatedAt, id, ...currEmployeeDataWithoutIdUpdatedAt } = currEmployeeData || {};
-  const historyData = await createEmployeeHistory(currEmployeeDataWithoutIdUpdatedAt);
+  const historyData = await createEmployeeHistory(currEmployeeData);
 
   await prisma.employee.delete({
     where: {
-      userId
+      id: employeeId
     }
   });
 
