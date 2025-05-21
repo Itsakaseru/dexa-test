@@ -5,6 +5,7 @@ import type { AttendanceEmployeeTargetData } from "@repo/shared-types";
 import { API_URL } from "~/api/config";
 import axios from "axios";
 import { redirect } from "react-router";
+import { handleAuthError, refreshAuth } from "~/api/auth";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
   const { id } = params;
@@ -24,21 +25,12 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
     }
   }
   catch (err) {
-    if (axios.isAxiosError(err)) {
-      switch (err.response?.status) {
-        case 401:
-          return redirect("/login");
-
-        default:
-          return redirect("/login");
-      }
-    }
+    return await handleAuthError(err)
   }
-  return {};
 }
 
 export default function Attendance({ loaderData }: Route.ComponentProps) {
-  const { employee, attendanceList } = loaderData || {};
+  const { employee, attendanceList } = loaderData;
 
   return (
     <main className="h-full m-0 md:m-5 p-10 items-center bg-white rounded-xl">

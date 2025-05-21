@@ -5,8 +5,13 @@ import { EmployeeTable } from "~/components/ui/employee/employee-table";
 import { EmployeeColumns } from "~/components/ui/employee/employee-columns";
 import { API_URL } from "~/api/config";
 import { redirect } from "react-router";
+import { handleAuthError } from "~/api/auth";
 
 export async function clientLoader() {
+  if (localStorage.getItem("hasAdminAccess") !== "1") {
+    return redirect("/dashboard");
+  }
+
   try {
     const employeeList = await axios.get<EmployeeData[]>(`${ API_URL }/employee/list`, {
       withCredentials: true,
@@ -15,7 +20,7 @@ export async function clientLoader() {
     return employeeList.data;
   }
   catch (err) {
-    return redirect("/dashboard");
+    return await handleAuthError(err);
   }
 }
 

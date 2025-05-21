@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import type { AttendanceDataToday } from "@repo/shared-types";
 import { API_URL } from "~/api/config";
+import { handleAuthError } from "~/api/auth";
 
 export async function clientLoader() {
   try {
@@ -25,15 +26,9 @@ export async function clientLoader() {
 
     return {
       todayAttendanceData: resCurrent.data
-    }
+    };
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      switch (error.response?.status) {
-        default:
-          return redirect("/login");
-      }
-    }
-    return redirect("/login");
+    return await handleAuthError(error);
   }
 }
 

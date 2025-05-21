@@ -4,7 +4,7 @@ import { AttendanceColumns } from "~/components/ui/attendance/attendance-columns
 import type { AttendanceEmployeeTargetData } from "@repo/shared-types";
 import { API_URL } from "~/api/config";
 import axios from "axios";
-import { redirect } from "react-router";
+import { handleAuthError } from "~/api/auth";
 
 export async function clientLoader() {
   try {
@@ -15,17 +15,8 @@ export async function clientLoader() {
     return attendanceList.data;
   }
   catch (err) {
-    if (axios.isAxiosError(err)) {
-      switch (err.response?.status) {
-        case 401:
-          return redirect("/login");
-
-        default:
-          return redirect("/login");
-      }
-    }
+    return await handleAuthError(err);
   }
-  return [];
 }
 
 export default function Attendance({ loaderData }: Route.ComponentProps) {

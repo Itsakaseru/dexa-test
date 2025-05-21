@@ -3,11 +3,16 @@ import type { Route } from "../../employee/edit/+types";
 import type { EmployeeData, UserEmployeeAttendanceData } from "@repo/shared-types";
 import { API_URL } from "~/api/config";
 import axios from "axios";
+import { handleAuthError } from "~/api/auth";
 import { redirect } from "react-router";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
-  const { id } = params || {};
+  if (localStorage.getItem("hasAdminAccess") !== "1") {
+    return redirect("/dashboard");
+  }
 
+  const { id } = params || {};
+  
   try {
     const resEmployeeData = await axios.get<UserEmployeeAttendanceData>(`${API_URL}/employee/${id}`, {
       withCredentials: true,
@@ -18,7 +23,7 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
     }
   }
   catch (err) {
-    return redirect("/dashboard");
+    return await handleAuthError(err);
   }
 }
 
