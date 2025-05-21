@@ -56,11 +56,10 @@ async function insertTargetAttendance() {
 async function insertAttendance() {
   const attendanceData: Prisma.AttendanceCreateManyInput[] = [];
 
-  let startTime = dayjs(ATTENDANCE_START_DATE).startOf("day").set("hour", 8);
-  let endTime = dayjs(ATTENDANCE_START_DATE).startOf("day").set("hour", 17);
-
   let idx = 1;
   for (let userId = 1; userId <= USER_ID_MAX_SEED; userId++) {
+    let startTime = dayjs(ATTENDANCE_START_DATE).startOf("day").set("hour", 8);
+    let endTime = dayjs(ATTENDANCE_START_DATE).startOf("day").set("hour", 17);
     for (let day = 1; day <= ATTENDANCE_MAX_DAY_GENERATED;) {
       startTime = startTime.add(1, "day");
       endTime = endTime.add(1, "day");
