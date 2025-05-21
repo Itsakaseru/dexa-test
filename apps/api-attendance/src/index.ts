@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import attendanceRoute from "./routes/attendance.route";
 import { GlobalConfig } from "./config";
+import path from "path";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use(cors({
   origin: true
 }));
 app.use(logger);
+
+app.use(express.static(path.join(Config.dirPath, "uploads")));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

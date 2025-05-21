@@ -9,6 +9,7 @@ import userRoute from "./routes/user.route";
 import {verifyAccessToken} from "./middlewares/verify.middleware";
 import attendanceRoute from "./routes/attendance.route";
 import employeeRoute from "./routes/employee.route";
+import httpProxy from "http-proxy";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const logger = pinoHttp();
 const prisma = new PrismaClient();
+const apiProxy = httpProxy.createProxyServer();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,6 +32,15 @@ app.use(logger);
 app.get("/", (req: Request, res: Response) => {
   res.json({
     time: new Date().toUTCString(),
+  });
+});
+
+app.get("/uploads/*any", verifyAccessToken, (req: Request, res: Response) => {
+  req.url = req.url.replace("/uploads", "");
+
+  apiProxy.web(req, res, { target: "http://localhost:3002" }, (err: Error) => {
+    console.error("Proxy error:", err);
+    res.status(500).send("Proxy error");
   });
 });
 
