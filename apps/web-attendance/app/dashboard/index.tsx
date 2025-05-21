@@ -46,12 +46,15 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Prevent dialog from closing after inserting photo
+    if (open) return;
+
     const interval = setInterval(() => {
       setTime(new Date());
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [ time ])
+  }, [ time, open ])
 
   function onPhotoClick() {
     inputHtml.current?.click();
