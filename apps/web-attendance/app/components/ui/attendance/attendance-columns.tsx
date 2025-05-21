@@ -106,12 +106,19 @@ export const AttendanceColumns: ColumnDef<AttendanceData>[] = [
     accessorKey: "photo",
     header: "Photo",
     cell: ({ row }) => {
+      const userId = row.getValue("userId") as string;
       const photo = row.getValue("photo") as string;
+
       return (
           photo == null ?
           <div>-</div>
           :
-          <a className="text-neutral-400 underline" href={ `${ API_URL }/uploads/${ photo }` }>
+          <a
+            className="text-neutral-400 underline"
+            href={ `${ API_URL }/uploads/${userId}/${ photo }`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <LinkIcon className="h-4 w-4 inline-block ml-1" />
             Uploaded Photo
           </a>
