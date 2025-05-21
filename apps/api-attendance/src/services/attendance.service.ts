@@ -101,7 +101,7 @@ export async function movePhotoToFolder(attendanceData: AttendanceData, filename
   fs.existsSync(Config.uploadPath) || fs.mkdirSync(Config.uploadPath, { recursive: true });
   fs.existsSync(path.join(Config.uploadPath, attendanceData.userId.toString())) || fs.mkdirSync(path.join(Config.uploadPath, attendanceData.userId.toString()), { recursive: true });
 
-  fs.renameSync(path.join(Config.tempPath, filename), path.join(Config.uploadPath, attendanceData.userId.toString(), `${attendanceData.id}-${filename}`));
+  fs.renameSync(path.join(Config.tempPath, filename), path.join(Config.uploadPath, attendanceData.userId.toString(), filename));
 }
 
 export async function updateAttendance(id: number, data: AttendanceRegisterData) {

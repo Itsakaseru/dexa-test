@@ -128,14 +128,14 @@ export async function createIn(req: Request, res: Response, next: NextFunction) 
   else if (statusToday === "check-out") {
     res.status(StatusCodes.BAD_REQUEST).json({ message: "Already checked in" });
     return;
-  } 
+  }
   
   const attendanceRegisterData: AttendanceRegisterData = {
     userId: Number(id),
     typeId: 1, // check-in
     dateTime: new Date(),
     photo: filename,
-  }; 
+  };
 
   const attendanceData = await createAttendance(attendanceRegisterData);
 
