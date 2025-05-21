@@ -51,10 +51,18 @@ export async function updateUser(id: number, data: LoginData) {
   });
 }
 
+export async function deleteUserToken(id: number) {
+  return prisma.token.deleteMany({
+    where: {
+      userId: id
+    }
+  });
+}
+
 export async function deleteUser(id: number) {
   return prisma.user.delete({
     where: {
       id
-    }
+    },
   });
 }

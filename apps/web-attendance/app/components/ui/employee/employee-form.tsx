@@ -9,13 +9,18 @@ import dayjs from "dayjs";
 import InputTime from "./input-time";
 import axios from "axios";
 import { API_URL } from "~/api/config";
+import { toast } from "sonner";
+import { handleAuthError, shouldResubmit } from "~/api/auth";
 
 export default function EmployeeForm({ editMode = false, employeeData }: { editMode?: boolean, employeeData?: UserEmployeeAttendanceData }) {
   const name = useRef<HTMLInputElement>(null);
   const [ gender, setGender ] = useState<string | undefined>();
+  const genderRef = useRef<HTMLButtonElement>(null);
   const dob = useRef<HTMLInputElement>(null);
   const [ departmentId, setDepartmentId ] = useState<string | undefined>();
+  const departmentRef = useRef<HTMLButtonElement>(null);
   const [ positionId, setPositionId ] = useState<string | undefined>();
+  const positionRef = useRef<HTMLButtonElement>(null);
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
 
@@ -82,8 +87,60 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
     });
   }, [ gender ]);
 
+  async function highlightEmptyFields() {
+    if (!name.current?.value) {
+      name.current?.classList.add("border-red-500");
+    }
+    if (!gender) {
+      genderRef.current?.classList.add("border-red-500");
+    }
+    if (!dob.current?.value) {
+      dob.current?.classList.add("border-red-500");
+    }
+    if (!departmentId) {
+      departmentRef.current?.classList.add("border-red-500");
+    }
+    if (!positionId) {
+      positionRef.current?.classList.add("border-red-500");
+    }
+    if (!email.current?.value) {
+      email.current?.classList.add("border-red-500");
+    }
+    if (!password.current?.value && !editMode) {
+      password.current?.classList.add("border-red-500");
+    }
+  }
+
+  async function clearHighlightInFields() {
+    name.current?.classList.remove("border-red-500");
+    dob.current?.classList.remove("border-red-500");
+    departmentRef.current?.classList.remove("border-red-500");
+    positionRef.current?.classList.remove("border-red-500");
+    email.current?.classList.remove("border-red-500");
+    password.current?.classList.remove("border-red-500");
+  }
+
   async function handleSubmit() {
     const formData = new FormData();
+
+    clearHighlightInFields();
+    if (
+      !name.current?.value ||
+      !gender ||
+      !dob.current?.value ||
+      !departmentId ||
+      !positionId ||
+      !email.current?.value ||
+      (!password.current?.value && !editMode)
+    ) {
+      toast.error("Incomplete form data!", {
+        description: "Please fill out all the required fields (*required)",
+      });
+
+      highlightEmptyFields();
+
+      return;
+    }
 
     formData.append("name", name.current?.value || "");
     formData.append("gender", gender || "");
@@ -103,7 +160,6 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
         startTime: dayjs().hour(Number(startHours)).minute(Number(startMinutes)).toDate(),
         endTime: dayjs().hour(Number(endHours)).minute(Number(endMinutes)).toDate(),
       });
-      console.log(mondayAttendanceStart.current.value);
     }
     if (tuesdayAttendanceStart.current?.value && tuesdayAttendanceEnd.current?.value) {
       const [ startHours, startMinutes ] = tuesdayAttendanceStart.current.value.split(":");
@@ -165,23 +221,55 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
     if (editMode && employeeData) {
       formData.append("userId", employeeData.userId.toString());
       
-      await axios.post(`${API_URL}/employee/update/${employeeData.id}`, formData, {
-        withCredentials: true,
-      });
+      try {
+        await axios.post(`${ API_URL }/employee/update/${ employeeData.id }`, formData, {
+          withCredentials: true,
+        });
 
-      navigate("/employee");
+        toast.success("Employee data updated!", {
+          description: "Employee data has been successfully updated.",
+        });
+
+        navigate("/employee");
+      }
+      catch (err) {
+        if (await shouldResubmit(err)) {
+          handleSubmit();
+        }
+        else {
+          toast.error("Failed to create employee data!", {
+            description: "Please try again later.",
+          });
+        }
+      }
     }
     else {
-      await axios.post(`${API_URL}/employee/create`, formData, {
-        withCredentials: true,
-      });
+      try {
+        await axios.post(`${ API_URL }/employee/create`, formData, {
+          withCredentials: true,
+        });
 
-      navigate("/employee");
+        toast.success("Employee added!", {
+          description: "Employee data has been successfully added.",
+        });
+
+        navigate("/employee");
+      }
+      catch (err) {
+        if (await shouldResubmit(err)) {
+          handleSubmit();
+        }
+        else {
+          toast.error("Failed to create employee data!", {
+            description: "Please try again later.",
+          });
+        }
+      }
     }
   }
 
   return (
-    <div className="w-fit m-0 mx-auto md:m-5 p-10 items-center md:mx-auto bg-white rounded-xl">
+    <div className="w-fit m-0 mx-auto md:m-10 p-10 items-center md:mx-auto bg-white rounded-xl">
       <h1 className="text-2xl font-extrabold text-center">
         {
           editMode ?
@@ -202,7 +290,7 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
           <label className="col-span-1">
             Gender*
             <Select value={ gender } onValueChange={ setGender }>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" ref={genderRef}>
                 <SelectValue placeholder="Select Gender" />
               </SelectTrigger>
               <SelectContent>
@@ -218,7 +306,7 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
           <label>
             Department*
             <Select value={ departmentId } onValueChange={ setDepartmentId }>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" ref={departmentRef}>
                 <SelectValue placeholder="Select Department" />
               </SelectTrigger>
               <SelectContent>
@@ -233,7 +321,7 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
           <label>
             Position*
             <Select value={ positionId } onValueChange={ setPositionId }>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" ref={positionRef} >
                 <SelectValue placeholder="Select Position" />
               </SelectTrigger>
               <SelectContent>
@@ -252,7 +340,7 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
           <label className="col-span-2">
             Email*
             <div className="flex justify-items-center gap-4">
-              <Input name="email" type="email" ref={ email } />
+              <Input name="email" type="text" ref={ email } />
               <div className="font-semibold my-auto">@dexagroup.com</div>
             </div>
           </label>

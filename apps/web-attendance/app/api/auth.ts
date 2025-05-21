@@ -36,3 +36,24 @@ export async function handleAuthError(err: unknown) {
     return redirect("/login");
   }
 }
+
+export async function shouldResubmit(err: unknown) {
+  if (axios.isAxiosError(err)) {
+    switch (err.response?.status) {
+      case StatusCodes.UNAUTHORIZED:
+        try {
+          await refreshAuth();
+          return true;
+        }
+        catch (err) {
+          return false;
+        }
+  
+      default:
+        return false;
+    }
+  }
+  else {
+    return true;
+  }
+}

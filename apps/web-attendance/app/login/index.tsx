@@ -15,6 +15,10 @@ export async function clientAction({ request }: Route.ActionArgs) {
   const data = Object.fromEntries(formData) as unknown as LoginData;
 
   try {
+    if (!data.email || !data.password) {
+      return { statusCode: StatusCodes.BAD_REQUEST, message: "Email and password are required!" };
+    }
+
     const res = await auth.login(data);
 
     localStorage.setItem("isLoggedIn", "1");
@@ -26,19 +30,19 @@ export async function clientAction({ request }: Route.ActionArgs) {
     if (axios.isAxiosError(err)) {
       switch (err.status) {
         case StatusCodes.UNAUTHORIZED:
-          return { message: "Invalid email or password" };
+          return { statusCode: StatusCodes.UNAUTHORIZED,message: "Invalid email or password!" };
 
         default:
-          return { message: "Internal server error" };
+          return { statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: "Internal server error!" };
       }
     }
   }
 
-  return { message: "An unknown error occured!" };
+  return { statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: "An unknown error occured!" };
 }
 
 export default function Index({ actionData }: Route.ComponentProps) {
-  const { message } = actionData || {};
+  const { statusCode, message } = actionData || {};
 
   return (
     <main className="flex flex-col w-screen h-screen items-center justify-center">

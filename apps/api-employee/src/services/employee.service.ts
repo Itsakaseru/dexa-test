@@ -15,14 +15,6 @@ export async function getEmployeeByUserId(userId: number) {
   });
 }
 
-export async function getEmployeeById(id: number) {
-  return prisma.employee.findUnique({
-    where: {
-      id
-    }
-  });
-}
-
 export async function createEmployee(data: EmployeeRegisterData) {
   return prisma.employee.create({
     data: {
@@ -72,7 +64,7 @@ export async function updateEmployee(id: number, data: EmployeeRegisterData) {
 }
 
 export async function deleteEmployee(userId: number) {
-  const currEmployeeData = await getEmployeeById(userId);
+  const currEmployeeData = await getEmployeeByUserId(userId);
 
   // Failed to find data
   if (!currEmployeeData) return null;

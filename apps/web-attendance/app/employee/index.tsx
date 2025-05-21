@@ -26,17 +26,19 @@ export async function clientLoader() {
 
 export default function Employee({ loaderData }: Route.ComponentProps) {
   return (
-    <main className="h-full m-0 md:m-5 p-10 items-center bg-white rounded-xl">
-      <div className="container grid grid-cols-3 mx-auto gap-6">
-        <div className="flex flex-col col-span-3">
-          <h1 className="col-span-3 text-2xl font-bold">Employee List</h1>
-          <div className="text-muted-foreground">List of DexaGroup Employee</div>
-        </div>
-        <div className="col-span-3">
-          <EmployeeTable
-            data={loaderData}
-            columns={EmployeeColumns}
-          />
+    <main className="flex flex-col grow w-full">
+      <div className="h-full m-0 md:m-5 p-10 items-center bg-white rounded-xl">
+        <div className="container grid grid-cols-3 mx-auto gap-6">
+          <div className="flex flex-col col-span-3">
+            <h1 className="col-span-3 text-2xl font-bold">Employee List</h1>
+            <div className="text-muted-foreground">List of DexaGroup Employee</div>
+          </div>
+          <div className="col-span-3">
+            <EmployeeTable
+              data={ loaderData }
+              columns={ EmployeeColumns }
+            />
+          </div>
         </div>
       </div>
     </main>

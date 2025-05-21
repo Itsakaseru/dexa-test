@@ -128,12 +128,12 @@ export const EmployeeColumns: ColumnDef<EmployeeData>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => navigate(`/attendance/${row.getValue("id")}`)}
+                onClick={() => navigate(`/attendance/${row.getValue("userId")}`)}
               >
                 View Attendances
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => navigate(`/employee/edit/${row.getValue("id")}`)}
+                onClick={() => navigate(`/employee/edit/${row.getValue("userId")}`)}
               >
                 Edit Employee
               </DropdownMenuItem>

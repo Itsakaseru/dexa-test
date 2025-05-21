@@ -3,7 +3,7 @@ import httpProxy from "http-proxy";
 import { hasAdminAccess } from "../services/auth.service";
 import multer from "multer";
 import { EmployeeRegisterData, LoginData, TargetAttendanceFormData } from "@repo/shared-types";
-import { createUser, deleteUser, getUserById, updateUser } from "../services/user.service";
+import { createUser, deleteUser, deleteUserToken, getUserById, updateUser } from "../services/user.service";
 import axios from "axios";
 import { StatusCodes } from "http-status-codes";
 
@@ -179,9 +179,17 @@ router.delete("/remove/:id", async (req, res, next) => {
   }
 
   // TODO: Implement short circuit, reverse action if one of the request failed
-  await deleteUser(Number(id));
-  await axios.post(`http://localhost:3001/employee/remove/${id}`);
-  await axios.post(`http://localhost:3002/attendance/remove/${id}`);
+  try {
+    await deleteUserToken(Number(id));
+    await deleteUser(Number(id));
+    await axios.post(`http://localhost:3001/employee/remove/${id}`);
+    await axios.post(`http://localhost:3002/attendance/remove/${id}`);
+  }
+  catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+    return;
+  }
 
   res.send("OK");
   return;
