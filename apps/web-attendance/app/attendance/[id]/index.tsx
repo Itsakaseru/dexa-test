@@ -1,23 +1,16 @@
 import { AttendanceTable } from "~/components/ui/attendance/attendance-table";
 import type { Route } from "../../attendance/[id]/+types";
 import { AttendanceColumns } from "~/components/ui/attendance/attendance-columns";
-import type { AttendanceEmployeeTargetData } from "@repo/shared-types";
-import { API_URL } from "~/api/config";
-import axios from "axios";
-import { redirect } from "react-router";
 import { handleAuthError, refreshAuth } from "~/api/auth";
+import { getEmployeeDataByUserId } from "~/api/employee";
+import { getAttendanceListByUserId } from "~/api/attendance";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
   const { id } = params;
 
   try {
-    const employeeData = await axios.get(`${ API_URL }/employee/${id}`, {
-      withCredentials: true,
-    });
-
-    const attendanceList = await axios.get<AttendanceEmployeeTargetData[]>(`${ API_URL }/attendance/list/${id}`, {
-      withCredentials: true,
-    });
+    const employeeData = await getEmployeeDataByUserId(id);
+    const attendanceList = await getAttendanceListByUserId(id);
 
     return {
       employee: employeeData.data,
