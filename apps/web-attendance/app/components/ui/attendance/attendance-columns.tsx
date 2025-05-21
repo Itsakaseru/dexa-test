@@ -51,10 +51,19 @@ export const AttendanceColumns: ColumnDef<AttendanceData>[] = [
     }
   },
   {
+    accessorKey: "typeId",
+    header: "Type",
+    cell: ({ row }) => {
+      const typeId = row.getValue("typeId") as number;
+      return typeId === 1 ? "Check In" : "Check Out";
+    }
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
       const timeData = row.getValue("dateTime") as number;
+      const typeId = row.getValue("typeId") as number;
       const targetTimeData = row.getValue("targetTime") as number;
 
       const [ timeHours, timeMinutes ] = dayjs(timeData).format("HH:mm").split(":");
@@ -63,10 +72,11 @@ export const AttendanceColumns: ColumnDef<AttendanceData>[] = [
       // If the time is the same as the target then, show on time
       // If the time is greater than the target then, show late
       // If the time is less than the target then, show early
+      // Reverse the logic if check out
 
       let status = "";
 
-      //<div className="bg-green-500 w-2 h-2 rounded-full mr-2" />
+      // If check in
       if (timeHours === targetHours && timeMinutes === targetMinutes) {
         status = "On Time";
       } else if (timeHours > targetHours || (timeHours === targetHours && timeMinutes > targetMinutes)) {
@@ -81,9 +91,9 @@ export const AttendanceColumns: ColumnDef<AttendanceData>[] = [
             status === "On Time" ? (
               <div className="bg-green-500 w-2 h-2 rounded-full mr-2" />
             ) : status === "Early" ? (
-              <div className="bg-green-700 w-2 h-2 rounded-full mr-2" />
+              <div className={`${ typeId === 1 ? "bg-green-700" : "bg-red-500" } w-2 h-2 rounded-full mr-2`} />
             ) : (
-              <div className="bg-red-500 w-2 h-2 rounded-full mr-2" />
+              <div className={ `${ typeId === 2 ? "bg-green-700" : "bg-red-500" } w-2 h-2 rounded-full mr-2`} />
             )
           }
           { status }
