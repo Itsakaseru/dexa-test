@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 
 const USER_ID_MAX_SEED = 8;
 const ATTENDANCE_MAX_DAY_GENERATED = 20;
-const ATTENDANCE_START_DATE = dayjs().tz("Asia/Jakarta").set("month", 4).set("date", 5).set("year", 2025).toDate();
+const ATTENDANCE_START_DATE = dayjs().tz("Asia/Jakarta").set("month", 4).set("date", 4).set("year", 2025).toDate();
 const DEFAULT_ATTENDANCE_TARGET_TIME = {
   startTime: dayjs().tz("Asia/Jakarta").startOf("day").set("hour", 8).toDate(),
   endTime: dayjs().tz("Asia/Jakarta").startOf("day").set("hour", 17).toDate()
@@ -56,29 +56,40 @@ async function insertTargetAttendance() {
 async function insertAttendance() {
   const attendanceData: Prisma.AttendanceCreateManyInput[] = [];
 
+  let startTime = dayjs(ATTENDANCE_START_DATE).startOf("day").set("hour", 8);
+  let endTime = dayjs(ATTENDANCE_START_DATE).startOf("day").set("hour", 17);
+
   let idx = 1;
   for (let userId = 1; userId <= USER_ID_MAX_SEED; userId++) {
-    for (let day = 1; day <= ATTENDANCE_MAX_DAY_GENERATED; day++) {
-      for (let attendanceType = 1; attendanceType <= 2; attendanceType++) {
+    for (let day = 1; day <= ATTENDANCE_MAX_DAY_GENERATED;) {
+      startTime = startTime.add(1, "day");
+      endTime = endTime.add(1, "day");
 
-        const offsetDay = Math.floor(day / 6) * 2;
-
-        // Check-in and Check-out data
-        const dateTime = attendanceType === 1 ?
-          // Start from monday + current-day count + offset (no weekends data)
-          dayjs(ATTENDANCE_START_DATE).add(day - 1 + offsetDay, "day").startOf("day").set("hour", 8).toDate() :
-          dayjs(ATTENDANCE_START_DATE).add(day - 1 + offsetDay, "day").startOf("day").set("hour", 17).toDate();
-
-        attendanceData.push({
-          id: idx,
-          userId: userId,
-          typeId: attendanceType,
-          dateTime,
-          photo: null
-        });
-
-        idx++;
+      // If Saturday or Wednesday skip
+      if (startTime.get("day") === 0 || startTime.get("day") === 6) {
+        continue;
       }
+
+      attendanceData.push({
+        id: idx,
+        userId: userId,
+        typeId: 1,
+        dateTime: startTime.toDate(),
+        photo: null
+      });
+
+      idx++;
+
+      attendanceData.push({
+        id: idx,
+        userId: userId,
+        typeId: 2,
+        dateTime: endTime.toDate(),
+        photo: null
+      });
+
+      idx++;
+      day++;
     }
   }
 
