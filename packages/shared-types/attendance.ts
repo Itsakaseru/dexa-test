@@ -1,6 +1,6 @@
 export enum AttendanceType {
-  IN = 1,
-  OUT = 2,
+  CHECK_IN = 1,
+  CHECK_OUT = 2,
 }
 
 export enum Weekday {
@@ -17,12 +17,40 @@ export interface AttendanceRegisterData {
   userId: number,
   typeId: AttendanceType,
   dateTime: Date,
-  photo?: string,
+  photo: string | null,
 }
 
-export interface TargetAttendanceRegisterData {
-  userId: number,
+export interface AttendanceData extends AttendanceRegisterData {
+  id: number
+}
+
+export interface AttendanceEmployeeTargetData extends AttendanceData {
+  name: string,
+  targetTime: Date
+}
+
+export interface TargetAttendanceFormData {
   weekday: Weekday,
   startTime: Date,
   endTime: Date,
+}
+
+export interface TargetAttendanceRegisterData extends TargetAttendanceFormData {
+  userId: number,
+}
+
+export interface TargetAttendanceData extends TargetAttendanceRegisterData {
+  id: number
+}
+
+export interface TargetAttendanceHistoryData extends TargetAttendanceData {
+  createdAt: Date,
+}
+
+export interface AttendanceDataToday {
+  target: TargetAttendanceRegisterData | null,
+  attendance: {
+    checkIn: AttendanceData | null,
+    checkOut: AttendanceData | null,
+  }
 }

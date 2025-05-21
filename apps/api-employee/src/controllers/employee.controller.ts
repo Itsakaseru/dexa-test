@@ -36,7 +36,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
     gender,
     dob,
     departmentId,
-    positionId
+    positionId,
   } = req.body || {};
 
   if (!userId || !name || !gender || !dob || !departmentId || !positionId) {
@@ -112,7 +112,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   return;
 }
 
-export async function removeById(req: Request, res: Response, next: NextFunction) {
+export async function removeByUserId(req: Request, res: Response, next: NextFunction) {
   const { id } = req.params || {};
 
   const historyData = await deleteEmployee(Number(id));

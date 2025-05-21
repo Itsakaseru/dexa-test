@@ -1,4 +1,4 @@
-import { type LoginData } from "./auth";
+import type { TargetAttendanceData } from "./attendance";
 
 export interface EmployeeRegisterData {
   userId: number,
@@ -16,7 +16,15 @@ export interface EmployeeData extends EmployeeRegisterData {
   updatedAt: Date,
 }
 
-export const DepartmentMap: { [key: number]: string } = {
+export interface UserEmployeeAttendanceData extends EmployeeData {
+  email: string,
+  targetAttendance: TargetAttendanceData[],
+}
+
+type Department = "IT" | "HRD" | "Finance" | "Marketing" | "Sales"
+type Position = "Head" | "Manager" | "Employee"
+
+export const DepartmentMap: { [key: number]: Department } = {
   1: "IT",
   2: "HRD",
   3: "Finance",
@@ -24,7 +32,7 @@ export const DepartmentMap: { [key: number]: string } = {
   5: "Sales",
 };
 
-export const PositionMap: { [key: number]: string } = {
+export const PositionMap: { [key: number]: Position } = {
   1: "Head",
   2: "Manager",
   3: "Employee",

@@ -4,6 +4,8 @@ import { JwtPayload } from "../types/auth.type";
 import { v7 as uuidv7 } from "uuid";
 import ms from "ms";
 import jwt from "jsonwebtoken";
+import axios from "axios";
+import { EmployeeData } from "@repo/shared-types";
 
 const prisma = new PrismaClient();
 
@@ -102,4 +104,18 @@ export async function getJwtSecret() {
   }
 
   return secret;
+}
+
+export async function hasAdminAccess(userId: number) {
+  try {
+    const employee = await axios.get<EmployeeData>(`http://localhost:3001/employee/${userId}`);
+
+    if (employee.data.departmentId === 2 && employee.data.positionId === 1) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    return false;
+  }
 }

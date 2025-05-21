@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { pinoHttp } from "pino-http";
 import authRoute from "./routes/auth.route";
 import { PrismaClient } from "../prisma/generated";
@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRoute from "./routes/user.route";
 import {verifyAccessToken} from "./middlewares/verify.middleware";
+import attendanceRoute from "./routes/attendance.route";
+import employeeRoute from "./routes/employee.route";
 
 dotenv.config();
 
@@ -17,6 +19,7 @@ const logger = pinoHttp();
 const prisma = new PrismaClient();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
@@ -25,13 +28,16 @@ app.use(cors({
 app.use(logger);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.json({
+    time: new Date().toUTCString(),
+  });
 });
 
 app.use("/auth", authRoute);
 app.use("/user", verifyAccessToken, userRoute);
 
-
+app.use("/attendance", verifyAccessToken, attendanceRoute);
+app.use("/employee", verifyAccessToken, employeeRoute);
 
 app.listen(PORT, async () => {
   await prisma.$connect();

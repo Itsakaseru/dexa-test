@@ -3,6 +3,7 @@ import {
   decodeToken,
   findJti,
   generateToken,
+  hasAdminAccess,
   isPasswordValid, revokeToken,
   verifyToken
 } from "../services/auth.service";
@@ -37,7 +38,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     res.cookie("accessToken", accessToken, {
       secure: process.env.NODE_ENV === "production",
       expires: accessToken.expiredAt,
-      httpOnly: false,
+      httpOnly: true,
     });
 
     res.cookie("refreshToken", refreshToken, {
@@ -48,6 +49,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     res.status(StatusCodes.OK).json({
       message: "Login successful",
+      hasAdminAccess: await hasAdminAccess(user.id),
     });
     return;
   }
@@ -80,7 +82,7 @@ export async function refreshToken(req: Request, res: Response, next: NextFuncti
     res.cookie("accessToken", accessToken, {
       secure: process.env.NODE_ENV === "production",
       expires: accessToken.expiredAt,
-      httpOnly: false,
+      httpOnly: true,
     });
 
     res.status(StatusCodes.OK).json({

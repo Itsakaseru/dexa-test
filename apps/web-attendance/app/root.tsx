@@ -9,18 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import * as auth from "~/api/auth";
 
-export async function clientAction({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-
-  if (await auth.login(data)) {
-    return redirect("/");
-  }
-
-  return redirect("/");
-}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -54,7 +43,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <Outlet />
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

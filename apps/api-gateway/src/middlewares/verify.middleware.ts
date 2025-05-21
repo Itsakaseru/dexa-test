@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "../services/auth.service";
+import { decodeToken, verifyToken } from "../services/auth.service";
 import { StatusCodes } from "http-status-codes";
 
 export async function verifyAccessToken(req: Request, res: Response, next: NextFunction) {
@@ -13,6 +13,8 @@ export async function verifyAccessToken(req: Request, res: Response, next: NextF
   }
 
   if (await verifyToken(accessToken)) {
+    const decoded = await decodeToken(accessToken);
+    res.locals.decoded = decoded;
     next();
   }
   else {

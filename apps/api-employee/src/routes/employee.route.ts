@@ -8,6 +8,6 @@ router.get("/:userId", employee.getByUserId);
 
 router.post("/create", employee.create);
 router.post("/update/:id", employee.update);
-router.post("/remove/:id", employee.removeById);
+router.post("/remove/:id", employee.removeByUserId);
 
 export default router;

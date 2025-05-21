@@ -11,6 +11,12 @@ import {
 } from "../dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../alert-dialog";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { API_URL } from "~/api/config";
+import axios from "axios";
 
 export const EmployeeColumns: ColumnDef<EmployeeData>[] = [
   {
@@ -78,26 +84,69 @@ export const EmployeeColumns: ColumnDef<EmployeeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const [ open, setOpen ] = useState(false);
+      const navigate = useNavigate();
+
+      async function deleteEmployee() {
+        const userId = row.getValue("userId") as string;
+        await axios.delete(`${API_URL}/employee/remove/${userId}`, {
+          withCredentials: true,
+        });
+
+        setOpen(false);
+        navigate("/employee");
+      }
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>View Attendances</DropdownMenuItem>
-            <DropdownMenuItem>Edit Employee</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="text-red-700"
-              onClick={() => console.log("Delete Employee")}
-            >
-              Delete Employee
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-red-600">Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the employee data
+                  from the servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                className="bg-red-600 hover:bg-red-800"
+                onClick={() => deleteEmployee()}
+                >
+                  DELETE
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => navigate(`/attendance/${row.getValue("id")}`)}
+              >
+                View Attendances
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigate(`/employee/edit/${row.getValue("id")}`)}
+              >
+                Edit Employee
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-red-700"
+                onClick={() => setOpen(!open)}
+              >
+                Delete Employee
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )
     }
   }

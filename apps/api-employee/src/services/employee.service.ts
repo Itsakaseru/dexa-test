@@ -56,12 +56,14 @@ export async function updateEmployee(id: number, data: EmployeeRegisterData) {
 
   const historyData = await createEmployeeHistory(currEmployeeData);
 
+  const { userId, ...dataWithoutUserId } = data || {};
+
   await prisma.employee.update({
     where: {
       id
     },
     data: {
-      ...data,
+      ...dataWithoutUserId,
       updatedAt: new Date()
     }
   });
@@ -69,8 +71,8 @@ export async function updateEmployee(id: number, data: EmployeeRegisterData) {
   return historyData;
 }
 
-export async function deleteEmployee(employeeId: number) {
-  const currEmployeeData = await getEmployeeById(employeeId);
+export async function deleteEmployee(userId: number) {
+  const currEmployeeData = await getEmployeeById(userId);
 
   // Failed to find data
   if (!currEmployeeData) return null;
@@ -79,7 +81,7 @@ export async function deleteEmployee(employeeId: number) {
 
   await prisma.employee.delete({
     where: {
-      id: employeeId
+      userId
     }
   });
 

@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import {Input} from "~/components/ui/input";
 import {Button} from "~/components/ui/button";
+import {redirect, useNavigate} from "react-router";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -24,13 +25,12 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function EmployeeTable<TData, TValue>(
-  { dataTableProps, onAddEmployee }:
-  { dataTableProps: DataTableProps<TData, TValue>, onAddEmployee: () => void }
+  { columns, data }:
+  DataTableProps<TData, TValue>
 ) {
-  const { columns, data } = dataTableProps;
-
   const [ sorting, setSorting ] = useState<SortingState>([]);
   const [ columnFilters, setColumnFilters ] = useState<ColumnFiltersState>([]);
+  const navigate = useNavigate();
 
   const table = useReactTable({
     data,
@@ -61,7 +61,7 @@ export function EmployeeTable<TData, TValue>(
         />
       </div>
       <div className="col-start-3 flex justify-end">
-        <Button variant="outline" onClick={onAddEmployee}>Add Employee</Button>
+        <Button variant="outline" onClick={() => navigate("/employee/create")}>Add Employee</Button>
       </div>
       <div className="col-span-3 rounded-md border">
         <Table>

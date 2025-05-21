@@ -8,7 +8,7 @@ import employeeRoute from "./routes/employee.route";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 const logger = pinoHttp();

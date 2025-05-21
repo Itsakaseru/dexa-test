@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../prisma/generated";
+import { Prisma, PrismaClient } from "../../prisma/generated";
 import * as bcrypt from "bcrypt";
 import { LoginData } from "@repo/shared-types";
 
@@ -36,15 +36,18 @@ export async function createUser(data: LoginData) {
 }
 
 export async function updateUser(id: number, data: LoginData) {
+  // Only update password if it is provided
+  const updatedData: Prisma.UserUpdateInput = {
+    email: data.email,
+    updatedAt: new Date(),
+    ...(data.password ? { hash: await bcrypt.hash(data.password, 10) } : {}),
+  }
+
   return prisma.user.update({
     where: {
       id
     },
-    data: {
-      email: data.email,
-      hash: await bcrypt.hash(data.password, 10),
-      updatedAt: new Date(),
-    }
+    data: updatedData
   });
 }
 

@@ -5,16 +5,20 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import attendanceRoute from "./routes/attendance.route";
+import { GlobalConfig } from "./config";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
+
+export const Config = new GlobalConfig(process.cwd());
 
 const app = express();
 const logger = pinoHttp();
 const prisma = new PrismaClient();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
