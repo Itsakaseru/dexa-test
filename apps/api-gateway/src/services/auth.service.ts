@@ -43,7 +43,7 @@ export async function generateToken(userId: number, type: JwtTokenType) {
   const expiredAt = new Date(Date.now() + ms(expiredIn));
 
   const payload: JwtPayload = {
-    iss: "https://dexagroup.com",
+    iss: "https://attendee.com",
     jti: uuidv7(),
     userId: userId,
   };

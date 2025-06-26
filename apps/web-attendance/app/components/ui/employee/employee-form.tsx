@@ -147,7 +147,7 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
     formData.append("dob", dayjs(dob.current?.value).toISOString() || "");
     formData.append("departmentId", departmentId || "");
     formData.append("positionId", positionId || "");
-    formData.append("email", `${email.current?.value}@dexagroup.com` || "");
+    formData.append("email", `${email.current?.value}@attendee.com` || "");
     formData.append("password", password.current?.value || "");
 
     const targetAttendance: TargetAttendanceFormData[] = [];
@@ -341,7 +341,7 @@ export default function EmployeeForm({ editMode = false, employeeData }: { editM
             Email*
             <div className="flex justify-items-center gap-4">
               <Input name="email" type="text" ref={ email } />
-              <div className="font-semibold my-auto">@dexagroup.com</div>
+              <div className="font-semibold my-auto">@attendee.com</div>
             </div>
           </label>
           <label className="col-span-2">

@@ -31,7 +31,7 @@ export default function Employee({ loaderData }: Route.ComponentProps) {
         <div className="container grid grid-cols-3 mx-auto gap-6">
           <div className="flex flex-col col-span-3">
             <h1 className="col-span-3 text-2xl font-bold">Employee List</h1>
-            <div className="text-muted-foreground">List of DexaGroup Employee</div>
+            <div className="text-muted-foreground">List of Employee</div>
           </div>
           <div className="col-span-3">
             <EmployeeTable

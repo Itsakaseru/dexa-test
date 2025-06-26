@@ -63,7 +63,7 @@ export default function Navbar() {
     <nav
       className="flex flex-row justify-between items-center w-full pl-5 pr-8 py-4 text-sm bg-white border-b-1 border-gray-100"
     >
-      <h1 className="font-extrabold text-xl cursor-pointer" onClick={() => navigate("/dashboard")}>DexaGroup</h1>
+      <h1 className="font-extrabold text-xl cursor-pointer" onClick={() => navigate("/dashboard")}>Attendee</h1>
       <div className={"hidden sm:flex flex-row gap-8 items-center "}>
         {
           Links.map(({ name, href }) => (

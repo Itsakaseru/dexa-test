@@ -48,7 +48,7 @@ export default function Index({ actionData }: Route.ComponentProps) {
     <main className="flex flex-col w-screen h-screen items-center justify-center">
       <div className="flex flex-col md:flex-row w-screen grow items-center justify-center gap-16 md:gap-32">
         <div className="flex flex-col">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold">DexaGroup</h1>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold">Attendee</h1>
           <p className="md:text-xl">
             Attendance Portal
           </p>

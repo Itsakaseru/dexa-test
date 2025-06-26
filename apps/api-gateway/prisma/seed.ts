@@ -6,35 +6,35 @@ const prisma = new PrismaClient();
 // Example dummy data
 const users = [
   {
-    "email": "ardi.supriadi@dexagroup.com",
+    "email": "ardi.supriadi@attendee.com",
     "password": "ardiPassword",
   },
   {
-    "email": "sarah.johnson@dexagroup.com",
+    "email": "sarah.johnson@attendee.com",
     "password": "sarahPassword",
   },
   {
-    "email": "michael.chen@dexagroup.com",
+    "email": "michael.chen@attendee.com",
     "password": "michaelPassword",
   },
   {
-    "email": "emily.davis@dexagroup.com",
+    "email": "emily.davis@attendee.com",
     "password": "emilyPassword",
   },
   {
-    "email": "james.wilson@dexagroup.com",
+    "email": "james.wilson@attendee.com",
     "password": "jamesPassword",
   },
   {
-    "email": "linda.martinez@dexagroup.com",
+    "email": "linda.martinez@attendee.com",
     "password": "lindaPassword",
   },
   {
-    "email": "robert.taylor@dexagroup.com",
+    "email": "robert.taylor@attendee.com",
     "password": "robertPassword",
   },
   {
-    "email": "jessica.brown@dexagroup.com",
+    "email": "jessica.brown@attendee.com",
     "password": "jessicaPassword",
   }
 ]
@@ -54,6 +54,7 @@ async function insertUsers() {
 }
 
 async function clear() {
+  await prisma.token.deleteMany();
   await prisma.user.deleteMany();
 }
 
